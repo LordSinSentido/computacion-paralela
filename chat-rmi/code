@@ -1,0 +1,1 @@
+/usr/bin/env /usr/lib/jvm/java-18-openjdk/bin/java -XX:+ShowCodeDetailsInExceptionMessages -cp /home/lordsinsentido/.config/Code/User/workspaceStorage/4b461d6b6dee727a73cdb2283e4c84b5/redhat.java/jdt_ws/chat-rmi_2a322b0e/bin Servidor.Principal 

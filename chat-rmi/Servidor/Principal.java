@@ -10,7 +10,7 @@ import java.rmi.registry.Registry;
 public class Principal {
 
     public static void main(String[] args) {
-        int puerto = 1111;
+        int puerto = 32768;
 
         try {
             System.out.println("Inicializando el servidor...");

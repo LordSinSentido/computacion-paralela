@@ -254,7 +254,8 @@ public class Principal extends JFrame {
             recuperarDatos.start();
 
             principal.setTitle("Calculadora RMI");
-            principal.setSize(200, 350);
+            principal.pack();
+            //principal.setSize(200, 350);
             principal.setResizable(false);
             principal.setVisible(true);
             principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

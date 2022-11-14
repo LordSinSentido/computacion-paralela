@@ -15,7 +15,7 @@ public class Principal {
             String dialogo = JOptionPane.showInputDialog("Ingresa tu nombre");
             String nombre = dialogo;
 
-            Registry rmic = LocateRegistry.getRegistry("localhost", puerto);
+            Registry rmic = LocateRegistry.getRegistry("192.168.62.64", puerto);
             InterfaceChat servidor = (InterfaceChat) rmic.lookup("Chat");
             new Thread(new ImplementacionChatCliente(nombre, servidor)).start();
         } catch (Exception e) {
