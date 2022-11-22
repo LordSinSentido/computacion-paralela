@@ -6,6 +6,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import javax.imageio.ImageIO;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 
 import java.awt.BorderLayout;
@@ -20,7 +21,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.event.*;
 
 import Servidor.Interfaz;
 
@@ -30,6 +33,7 @@ public class Principal extends JFrame {
     BufferedImage imagenOriginal;
     BufferedImage imagenProcesada;
 
+    int modo = 0;
 
     float duracion;
     long inicio, fin;
@@ -43,6 +47,7 @@ public class Principal extends JFrame {
             BorderLayout areaDeElementos = new BorderLayout(10, 10);
             GridLayout layoutImagenes = new GridLayout(1, 2);
             GridLayout layoutBotones = new GridLayout(2, 2);
+            GridLayout layoutOpciones = new GridLayout(2, 1);
             GridLayout layoutResultados = new GridLayout(2, 3, 10, 0);
             FlowLayout layoutDerecha = new FlowLayout(FlowLayout.LEFT, 5, 5);
             
@@ -57,6 +62,8 @@ public class Principal extends JFrame {
             JPanel panelMetodos = new JPanel(layoutDerecha);
             JPanel panelAcciones = new JPanel(layoutDerecha);
             JPanel panelResultados = new JPanel(layoutResultados);
+            JPanel panelDeModos = new JPanel(layoutDerecha);
+            JPanel panelDeOppciones = new JPanel(layoutOpciones);
     
     
             /* Panel de imágenes */
@@ -122,7 +129,7 @@ public class Principal extends JFrame {
                         inicio = System.nanoTime();
 
                         try {
-                            ImageIcon resultado = interfaz.secuencial(0);
+                            ImageIcon resultado = interfaz.secuencial(modo);
                             imagenProcesada = convertir(resultado);
                         } catch (Exception e) {
                             System.err.println("-!- Ocurrió un error al procesar la imágen (Secuencial): " + e.getMessage());
@@ -152,7 +159,7 @@ public class Principal extends JFrame {
                         inicio = System.nanoTime();
 
                         try {
-                            ImageIcon resultado = interfaz.forkJoin(0);
+                            ImageIcon resultado = interfaz.forkJoin(modo);
                             imagenProcesada = convertir(resultado);
                         } catch (Exception e) {
                             System.err.println("-!- Ocurrió un error al procesar la imágen (Fork/Join): " + e.getMessage());
@@ -181,7 +188,7 @@ public class Principal extends JFrame {
                     botonExecutor.addActionListener((ActionEvent ae) -> {
                         inicio = System.nanoTime();
                         try {
-                            ImageIcon resultado = interfaz.executorService(0);
+                            ImageIcon resultado = interfaz.executorService(modo);
                             imagenProcesada = convertir(resultado);
                         } catch (Exception e) {
                             System.err.println("-!- Ocurrió un error al procesar la imágen (Executor Service): " + e.getMessage());
@@ -222,6 +229,23 @@ public class Principal extends JFrame {
                     panelBotones.add(panelMetodos);
                     
                 /* Panel de acciones */
+
+                    // Radio buttons
+                    ButtonGroup modos = new ButtonGroup();
+
+                    JRadioButton horizontal = new JRadioButton("Horizontal", true);
+                    horizontal.addActionListener(e -> {
+                        modo = 0;
+                    });
+                    modos.add(horizontal);
+                    panelDeModos.add(horizontal);
+
+                    JRadioButton vertical = new JRadioButton("Vertical");
+                    vertical.addActionListener(e -> {
+                        modo = 1;
+                    });
+                    modos.add(vertical);
+                    panelDeModos.add(vertical);
                     
                     // Boton para limpiar el canva
                     JButton botonLimpiar = new JButton("Limpiar resultado");
@@ -279,7 +303,10 @@ public class Principal extends JFrame {
                     panelAcciones.add(botonGuardar);
                     panelAcciones.add(botonAbrir);
                     
-                    panelBotones.add(panelAcciones);
+                    panelDeOppciones.add(panelDeModos);
+                    panelDeOppciones.add(panelAcciones);
+
+                    panelBotones.add(panelDeOppciones);
                     
                 
             add(panelImagenes, BorderLayout.CENTER);
@@ -330,7 +357,7 @@ public class Principal extends JFrame {
         int puerto = 5252;
 
         try {
-            Registry registro = LocateRegistry.getRegistry("localhost", puerto);
+            Registry registro = LocateRegistry.getRegistry("192.168.100.76", puerto);
             Interfaz interfaz = (Interfaz) registro.lookup("procesamiento");
 
             System.out.println("-!- Conexión establecida.");

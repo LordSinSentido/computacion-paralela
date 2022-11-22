@@ -140,12 +140,14 @@ public class Implementacion implements Interfaz {
             }
             resultado = tarea.get();
             executorService.shutdown();
+            Thread.sleep(1000);
         } catch (Exception e) {
             System.err.println("-!- Ocurrió un error al procesar las imágenes (Fork/Join): " + e.getMessage());
         } finally {
             System.out.println("-!- Tarea terminada.");
         }
 
+        
         return new ImageIcon(resultado);
     }
 

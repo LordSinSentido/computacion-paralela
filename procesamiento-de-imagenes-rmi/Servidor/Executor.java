@@ -81,7 +81,7 @@ public class Executor implements Callable<BufferedImage> {
     
     @Override
     public BufferedImage call() {
-        if(fin - inicio <= 1000) {
+        if(fin - inicio <= 2000) {
             try {
                 imagen = filtroGaussiano(imagen, inicio, fin);
                 imagen = convertirAGrises(imagen, inicio, fin);
